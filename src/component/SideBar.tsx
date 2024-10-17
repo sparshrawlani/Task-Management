@@ -168,11 +168,6 @@ const SideBar = () => {
               >
                 {/* Optionally add a placeholder option */}
                 <option value="">Select a Category</option>
-                {listTypes.map((type) => (
-                  <option value={type} key={type}>
-                    {type}
-                  </option>
-                ))}
                 {groups.map((group) => (
                   <option value={group.name} key={group.name}>
                     {group.name}
