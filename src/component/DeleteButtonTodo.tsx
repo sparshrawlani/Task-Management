@@ -13,7 +13,7 @@ const DeleteButtonTodo: React.FC<DeleteButtonProps> = ({
 }) => {
   const { groups, setGroups } = useTodo();
   const handleDeleteTodoItem = () => {
-    if (nameParam == "Tasks") {
+    if (nameParam == "Personal" || "Work" || "Urgent") {
       setGroups((prevGroups) =>
         prevGroups.map((group) => ({
           ...group,

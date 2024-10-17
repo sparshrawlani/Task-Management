@@ -14,6 +14,7 @@ export interface List {
 }
 
 export type TodoType = {
+  status: string;
   id: number;
   description: string;
   completed: boolean;

@@ -10,7 +10,7 @@ const SideBar = () => {
   const [newListName, setNewListName] = useState<string>("");
   const [newListGroupName, setNewListGroupName] = useState<string>("");
   const [newGroupName, setNewGroupName] = useState<string>("");
-  const [listTypes, setNewListType] = useState(["Tasks"]);
+  const [listTypes, setNewListType] = useState(["Personal", "Work", "Urgent"]);
 
   const handleExpandedGroup = (groupName: string) => {
     if (expandedGroup.has(groupName)) {
@@ -75,11 +75,16 @@ const SideBar = () => {
     <div className="flex mx-5">
       <div className="mr-5">
         <nav>
+          <div className="mb-4">
+            <span className="block py-2 px-4 bg-blue-500 text-white rounded-lg font-bold">
+              Pick a Category Below:
+            </span>
+          </div>
           <ul>
             {listTypes.map((listType) => (
               <li className="mb-2 text-white" key={listType}>
                 <Link
-                  className="block py-2 px-4 bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-200"
+                  className="block py-2 px-4 bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-200 w-32"
                   to={`filter/${listType}`}
                 >
                   {listType}
@@ -177,32 +182,34 @@ const SideBar = () => {
 
             {/* Main Category Section */}
             <div className="flex flex-col space-y-2">
-              <input
-                type="text"
-                value={newGroupName}
-                onChange={(e) => setNewGroupName(e.target.value)}
-                placeholder="Create a Category"
-                className="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <select
-                value={newGroupName}
-                onChange={(e) => setNewGroupName(e.target.value)}
-                className="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="" disabled>
-                  Select a Category
-                </option>
-                <option value="Personal">Personal</option>
-                <option value="Work">Work</option>
-                <option value="Urgent">Urgent</option>
-              </select>
-              <button
-                onClick={handleAddGroup}
-                className="py-2 px-4 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Add Category
-              </button>
-            </div>
+      <input
+        type="text"
+        value={newGroupName}
+        onChange={(e) => setNewGroupName(e.target.value)}
+        placeholder="Create a Category"
+        className="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <select
+        value={newGroupName}
+        onChange={(e) => setNewGroupName(e.target.value)}
+        className="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option>
+          Select a Category
+        </option>
+        {listTypes.map((listtype) => (
+          <option key={listtype} value={listTypes}>
+            {listtype}
+          </option>
+        ))}
+      </select>
+      <button
+        onClick={handleAddGroup}
+        className="py-2 px-4 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        Add Category
+      </button>
+    </div>
           </div>
         </div>
       </div>

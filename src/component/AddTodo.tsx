@@ -7,21 +7,13 @@ export const AddTodo: React.FC<{ nameParam: string | undefined }> = ({
 }) => {
   const [newTaskDescription, setNewTaskDescription] = useState("");
   const [newDueDate, setNewDueDate] = useState<Date | undefined>(undefined);
-  const [newRemindme, seRemindme] = useState<Date | undefined>(undefined);
-  const [selectedRepeatType, setSelectedRepeatType] = useState<
-    RepeatType | undefined
-  >(undefined);
+  const [newRemindme, setRemindme] = useState<Date | undefined>(undefined);
+  const [selectedRepeatType, setSelectedRepeatType] = useState<RepeatType | undefined>(undefined);
+  const [status, setStatus] = useState<boolean>(false); // **1. Added state for status (completed or not)**
   const { groups, setGroups } = useTodo();
-  const repeatTypes = [
-    "Daily",
-    "WeekDays",
-    "Weekly",
-    "Monthly",
-    "Yearly",
-    "Customized",
-  ];
+  const repeatTypes = ["Daily", "WeekDays", "Weekly", "Monthly", "Yearly", "Customized"];
 
-  // **1. Load tasks from localStorage on component mount**
+  // Load tasks from localStorage on component mount
   useEffect(() => {
     const savedGroups = localStorage.getItem("todoGroups");
     if (savedGroups) {
@@ -33,9 +25,7 @@ export const AddTodo: React.FC<{ nameParam: string | undefined }> = ({
     localStorage.setItem("todoGroups", JSON.stringify(groups)); // Save groups to localStorage
   }, [groups]);
 
-  const handleSelectedRepeatType = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
+  const handleSelectedRepeatType = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedRepeatType(e.target.value as RepeatType);
   };
 
@@ -61,14 +51,16 @@ export const AddTodo: React.FC<{ nameParam: string | undefined }> = ({
       const newTask: TodoType = {
         id: Date.now(),
         description: newTaskDescription,
-        completed: false,
+        completed: status, // **2. Set the completed status from the new status state**
         dueDate: newDueDate,
         remindme: newRemindme,
         repeat: selectedRepeatType,
         listType: [],
+        status: ""
       };
 
-      if (nameParam === "Tasks") {
+      // **3. Logic to determine where to add the new task**
+      if (nameParam === "Personal" || nameParam === "Work" || nameParam === "Urgent") {
         setGroups((prevGroups: Group[]) =>
           prevGroups.map((group) => {
             if (group.groupList.some((list) => list.name === "default")) {
@@ -92,6 +84,7 @@ export const AddTodo: React.FC<{ nameParam: string | undefined }> = ({
           })
         );
       }
+
       setGroups((prevGroups: Group[]) =>
         prevGroups.map((group) => {
           if (group.groupList.some((list) => list.name === nameParam)) {
@@ -113,6 +106,7 @@ export const AddTodo: React.FC<{ nameParam: string | undefined }> = ({
       );
 
       setNewTaskDescription("");
+      setStatus(false); // **4. Reset the status back to false after adding the task**
     }
   };
 
@@ -134,11 +128,9 @@ export const AddTodo: React.FC<{ nameParam: string | undefined }> = ({
               type="datetime-local"
               value={formatDateTime(newDueDate)}
               onChange={(e) =>
-                setNewDueDate(
-                  e.target.value ? new Date(e.target.value) : undefined
-                )
+                setNewDueDate(e.target.value ? new Date(e.target.value) : undefined)
               }
-              className="mt-1 p-2  ml-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-1 p-2 ml-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </label>
 
@@ -148,13 +140,12 @@ export const AddTodo: React.FC<{ nameParam: string | undefined }> = ({
               type="datetime-local"
               value={formatDateTime(newRemindme)}
               onChange={(e) =>
-                seRemindme(
-                  e.target.value ? new Date(e.target.value) : undefined
-                )
+                setRemindme(e.target.value ? new Date(e.target.value) : undefined)
               }
-              className="mt-1 p-2 ml-4  border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-1 p-2 ml-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </label>
+
           <label>
             Repeat
             <select
@@ -168,7 +159,19 @@ export const AddTodo: React.FC<{ nameParam: string | undefined }> = ({
               ))}
             </select>
           </label>
+
+          {/* **5. Added a toggle for task completion status** */}
+          <label className="block text-sm text-gray-700">
+            Completed
+            <input
+              type="checkbox"
+              checked={status}
+              onChange={(e) => setStatus(e.target.checked)} // Update status based on checkbox
+              className="ml-4 accent-blue-500"
+            />
+          </label>
         </div>
+
         <button
           onClick={(e) => handleAddTask(e)}
           className="px-4 py-2 bg-green-700 text-white font-bold rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-black-500"

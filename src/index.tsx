@@ -16,6 +16,15 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
+        path: "status/:nameParam",
+        element: <TodoList />, // This will receive filter status as a prop
+        // Adding `filter` param for status filter
+        loader: async ({ params }) => {
+          const { filterListType } = params as { filterListType: string };
+          return { filterListType }; // Return filter type for usage
+        },
+      },
+      {
         path: "list/:nameParam",
         element: <TodoList />,
       },
