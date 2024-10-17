@@ -166,6 +166,13 @@ const SideBar = () => {
                 onChange={(e) => setNewListGroupName(e.target.value)}
                 className="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
+                {/* Optionally add a placeholder option */}
+                <option value="">Select a Category</option>
+                {listTypes.map((type) => (
+                  <option value={type} key={type}>
+                    {type}
+                  </option>
+                ))}
                 {groups.map((group) => (
                   <option value={group.name} key={group.name}>
                     {group.name}
@@ -182,34 +189,20 @@ const SideBar = () => {
 
             {/* Main Category Section */}
             <div className="flex flex-col space-y-2">
-      <input
-        type="text"
-        value={newGroupName}
-        onChange={(e) => setNewGroupName(e.target.value)}
-        placeholder="Create a Category"
-        className="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <select
-        value={newGroupName}
-        onChange={(e) => setNewGroupName(e.target.value)}
-        className="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        <option>
-          Select a Category
-        </option>
-        {listTypes.map((listtype) => (
-          <option key={listtype} value={listTypes}>
-            {listtype}
-          </option>
-        ))}
-      </select>
-      <button
-        onClick={handleAddGroup}
-        className="py-2 px-4 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        Add Category
-      </button>
-    </div>
+              <input
+                type="text"
+                value={newGroupName}
+                onChange={(e) => setNewGroupName(e.target.value)}
+                placeholder="Create a Category"
+                className="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                onClick={handleAddGroup}
+                className="py-2 px-4 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                Add Category
+              </button>
+            </div>
           </div>
         </div>
       </div>
